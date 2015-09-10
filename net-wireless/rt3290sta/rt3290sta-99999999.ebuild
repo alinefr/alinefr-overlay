@@ -41,6 +41,8 @@ src_compile() {
 
 src_install() {
 	linux-mod_src_install
+	insinto /etc/Wireless/RT2860STA
+	doins RT2860STA.dat 
 }
 
 pkg_postinst() {
