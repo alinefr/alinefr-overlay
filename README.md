@@ -2,7 +2,7 @@ Gentoo Overlay by Aline Freitas
 
 ## Warning
 
-Use at your own risks!
+Use at your own risk!
 
 ## Installation
 
