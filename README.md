@@ -8,7 +8,7 @@ Use at your own risk!
 
 ### Using layman
 
-#### 1. add the 'sekyfsr' overlay:
+#### 1. add the 'alinefr' overlay:
     layman -o https://github.com/npinto/sekyfsr-gentoo-overlay/raw/master/overlay.xml -f -a sekyfsr
 
 #### 2. sync overlays:
