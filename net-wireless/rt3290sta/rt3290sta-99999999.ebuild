@@ -30,3 +30,8 @@ src_compile() {
 src_install() {
 	linux-mod_src_install
 }
+
+pkg_postinst() {
+	ewarn "if you have rt2800pci compiled as module, you SHOULD blacklist it!"
+	ewarn "Add 'blacklist rt2800pci' to /etc/modprobe.d/blacklist.conf."
+}
