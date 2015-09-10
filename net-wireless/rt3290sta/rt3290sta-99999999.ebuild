@@ -26,7 +26,7 @@ pkg_setup() {
 		fi
 		linux-mod_pkg_setup
 	elif linux_chkconfig_builtin "RT2800PCI" ; then
-		die "Your kernel was built with CONFIG_RT2800PCI=y. Remove-it!"
+		die "Your kernel was built with CONFIG_RT2800PCI=y. You need to rebuild it without this."
 	else
 		die "Nonmodular kernel detected. This package needs a modular kernel."
 	fi
@@ -34,7 +34,7 @@ pkg_setup() {
 
 src_compile() {
 	eval unset ARCH
-	emake
+	default
 }
 
 src_install() {
