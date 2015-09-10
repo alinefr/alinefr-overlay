@@ -35,6 +35,7 @@ pkg_setup() {
 }
 
 src_compile() {
+	# ARCH ebuild variable conflicts with ARCH from kernel Makefile.  
 	eval unset ARCH
 	default
 }
