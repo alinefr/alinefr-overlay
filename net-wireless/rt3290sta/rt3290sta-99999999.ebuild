@@ -21,11 +21,11 @@ MODULE_NAMES="rt3290sta(net/wireless:"${S}":"${S}"/os/linux)"
 pkg_setup() {
 	get_version
 	if linux_config_src_exists && linux_chkconfig_builtin "MODULES" ; then
-		if linux_chkconfig_present "RT2800PCI" ; then
+		if linux_chkconfig_module "RT2800PCI" ; then
 			warn_module=1
+		elif linux_chkconfig_builtin "RT2800PCI" ; then
+			die "Your kernel was built with CONFIG_RT2800PCI=y. You need to rebuild it without this."
 		fi
-	elif linux_chkconfig_builtin "RT2800PCI" ; then
-		die "Your kernel was built with CONFIG_RT2800PCI=y. You need to rebuild it without this."
 	else
 		die "Nonmodular kernel detected. This package needs a modular kernel."
 	fi
