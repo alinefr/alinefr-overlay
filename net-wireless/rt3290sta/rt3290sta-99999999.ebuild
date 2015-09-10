@@ -24,12 +24,12 @@ pkg_setup() {
 		if linux_chkconfig_present "RT2800PCI" ; then
 			warn_module=1
 		fi
-		linux-mod_pkg_setup
 	elif linux_chkconfig_builtin "RT2800PCI" ; then
 		die "Your kernel was built with CONFIG_RT2800PCI=y. You need to rebuild it without this."
 	else
 		die "Nonmodular kernel detected. This package needs a modular kernel."
 	fi
+	linux-mod_pkg_setup
 }
 
 src_compile() {
