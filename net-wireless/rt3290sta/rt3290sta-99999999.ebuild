@@ -8,7 +8,7 @@ DESCRIPTION="Forked driver for Ralink RT3290 Wi-Fi adapter"
 HOMEPAGE="https://github.com/pkeeper/rt3290sta"
 SRC_URI=""
 
-inherit eutils git-2
+inherit git-2 linux-mod
 
 EGIT_REPO_URI="git://github.com/pkeeper/${PN}.git"
 
@@ -16,11 +16,17 @@ LICENSE="Unknown"
 SLOT=0
 KEYWORDS="~amd64"
 
-src_prepare() {
-    epatch "${FILESDIR}/${PN}-destdir.patch"
+MODULE_NAMES="rt3290sta(net/wireless:"${S}":"${S}"/os/linux)"
+
+pkg_setup() {
+	linux-mod_pkg_setup
 }
 
 src_compile() {
 	eval unset ARCH
 	emake
+}
+
+src_install() {
+	linux-mod_src_install
 }
