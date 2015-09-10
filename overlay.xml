@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layman>
+    <overlay name="alinefr" quality="experimental" status="unofficial"
+        type="git" src="git://github.com/alinefr/alinefr-overlay.git">
+        <link>//github.com/alinefr/alinefr-overlay</link>
+        <description> alinefr gentoo overlay </description>
+    </overlay>
+</layman>
