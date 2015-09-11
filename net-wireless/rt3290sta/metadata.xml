@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <herd>lastpass</herd>
+  <herd>rt3290sta</herd>
   <maintainer>
     <email>aline@alinefreitas.com.br</email>
     <name>Aline Freitas</name>
   </maintainer>
   <longdescription lang="en">
 	</longdescription>
-  <use>
-    <flag name="firefox">Support for <pkg>www-client/firefox</pkg></flag>
-    <flag name="chromium">Support for <pkg>www-client/chromium</pkg></flag>
-    <flag name="chrome">Support for <pkg>www-client/chrome</pkg></flag>
-  </use>
 </pkgmetadata>
