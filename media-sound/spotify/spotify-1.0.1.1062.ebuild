@@ -66,9 +66,9 @@ RDEPEND="${DEPEND}
 
 S=${WORKDIR}
 
-QA_PREBUILT="/opt/spotify/spotify-client/spotify
-			/opt/spotify/spotify-client/Data/SpotifyHelper
-			/opt/spotify/spotify-client/Data/libcef.so"
+QA_PREBUILT="/usr/share/spotify/Spotify
+			/usr/share/spotify/libcef.so
+			/usr/share/spotify/libffmpegsumo.so"
 
 src_install() {
 	dodoc usr/share/doc/spotify-client/changelog.Debian.gz
@@ -81,7 +81,6 @@ src_install() {
 	insinto ${SPOTIFY_HOME}
 	doins -r usr/share/spotify/*
 	fperms +x ${SPOTIFY_HOME}/Spotify
-	# fperms +x ${SPOTIFY_HOME}/Data/SpotifyHelper
 
 	dodir /usr/bin
 	cat <<-EOF >"${D}"/usr/bin/spotify
@@ -95,12 +94,6 @@ src_install() {
 	cat <<-EOF >"${D}"/etc/revdep-rebuild/10${PN}
 		SEARCH_DIRS_MASK="${SPOTIFY_HOME}"
 	EOF
-
-	# for size in 16 22 24 32 48 64 128 256; do
-	# 	newicon -s ${size} "${S}${SPOTIFY_HOME}/Icons/spotify-linux-${size}.png" \
-	# 		"spotify-client.png"
-	# done
-	domenu "${FILESDIR}/spotify.desktop"
 
 	if use pax_kernel; then
 		#create the headers, reset them to default, then paxmark -m them
@@ -116,9 +109,6 @@ src_install() {
 		eqawarn "you suspect that ${PN} is being broken by this modification,"
 		eqawarn "please open a bug."
 	fi
-
-	#TODO fix for x86
-	dosym /usr/lib/libudev.so "${SPOTIFY_HOME}/Data/libudev.so.0"
 }
 
 pkg_preinst() {
@@ -132,7 +122,7 @@ pkg_postinst() {
 
 	ewarn "If Spotify crashes after an upgrade its cache may be corrupt."
 	ewarn "To remove the cache:"
-	ewarn "rm -rf ~/.cache/spotify"
+	ewarn "rm -rf ~/.cache/Spotify"
 	ewarn
 	ewarn "you need to use the ld.bfd linker with openssl"
 }
