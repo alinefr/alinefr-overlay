@@ -17,6 +17,7 @@ DEPEND="
 	gnome-extra/zenity
 	sys-apps/dbus
 	x11-misc/slock
+	x11-libs/gksu
 "
 
 src_install() {
