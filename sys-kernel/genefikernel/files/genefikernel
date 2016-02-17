@@ -1,0 +1,37 @@
+#!/bin/bash
+# Just a simple wrap to execute extra commands when building kernel and initramfs from genkernel.
+# -------------------------------------------------------------------------------
+# "THE BEER-WARE LICENSE" (Revision 42):
+# <aline@alinefreitas.com.br> wrote this file.  As long as you retain this notice 
+# you can do whatever you want with this stuff. If we meet some day, and you think
+# this stuff is worth it, you can buy me a beer in return.   Aline Freitas
+# -------------------------------------------------------------------------------
+
+array=($@)
+len=${#array[@]}
+_action=${array[$len-1]}
+_args=${array[@]:0:$len-1}
+
+_imagePath=/usr/src/linux/arch/x86_64/boot
+_efiPath=/boot/EFI/Boot
+_extraCommands=[[ -f $_imagePath/bzImage ]] && cp $_efiPath/bootx64{,.old}.efi && cp $_imagePath/bzImage $_efiPath/bootx64.efi
+
+
+if [ $# = 1 ]; then
+    _action=$1
+    unset $_args
+elif [ $# = 0 ]; then
+    /usr/bin/genkernel --help
+fi
+
+echo '$_action='$_action
+echo '$_args='$_args
+case $_action in
+    all)
+        /usr/bin/genkernel $_args all && $_extraCommands
+        ;;
+    *)
+        /usr/bin/genkernel $_args $_action
+        ;;
+esac
+
