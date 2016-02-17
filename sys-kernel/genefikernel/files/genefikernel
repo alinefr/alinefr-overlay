@@ -14,8 +14,11 @@ _args=${array[@]:0:$len-1}
 
 _imagePath=/usr/src/linux/arch/x86_64/boot
 _efiPath=/boot/EFI/Boot
-_extraCommands=[[ -f $_imagePath/bzImage ]] && cp $_efiPath/bootx64{,.old}.efi && cp $_imagePath/bzImage $_efiPath/bootx64.efi
 
+if [ "$(id -u)" != "0" ]; then
+    echo "Sorry, you are not root."
+    exit 1
+fi
 
 if [ $# = 1 ]; then
     _action=$1
@@ -24,11 +27,10 @@ elif [ $# = 0 ]; then
     /usr/bin/genkernel --help
 fi
 
-echo '$_action='$_action
-echo '$_args='$_args
 case $_action in
     all)
-        /usr/bin/genkernel $_args all && $_extraCommands
+        /usr/bin/genkernel $_args all && [[ -f $_imagePath/bzImage ]] && cp $_efiPath/bootx64{,.old}.efi && cp $_imagePath/bzImage $_efiPath/bootx64.efi
+
         ;;
     *)
         /usr/bin/genkernel $_args $_action
