@@ -22,7 +22,7 @@ fi
 
 if [ $# = 1 ]; then
     _action=$1
-    unset $_args
+    unset _args
 elif [ $# = 0 ]; then
     /usr/bin/genkernel --help
 fi
