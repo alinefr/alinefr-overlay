@@ -7,19 +7,29 @@
 # this stuff is worth it, you can buy me a beer in return.   Aline Freitas
 # -------------------------------------------------------------------------------
 
+# EFI boot dir.
+_efiPath=/boot/efi/EFI/Boot
+_imagePath=/usr/src/linux/arch/x86_64/boot
+
+# In _args we get any arguments except the last (_action).
 array=($@)
 len=${#array[@]}
 _action=${array[$len-1]}
 _args=${array[@]:0:$len-1}
 
-_imagePath=/usr/src/linux/arch/x86_64/boot
-_efiPath=/boot/EFI/Boot
-
+# Check if our $UID = 0
 if [ "$(id -u)" != "0" ]; then
     echo "Sorry, you are not root."
     exit 1
 fi
 
+# Check if our directories exist.
+if [[ ! -d $_imagePath ]] || [[ ! -d $_efiPath ]]; then
+    echo "$_imagePath or $_efiPath does not exist"
+    exit 1
+fi
+
+# If the user gives only one argument, this one should be _action.
 if [ $# = 1 ]; then
     _action=$1
     unset _args
@@ -27,13 +37,26 @@ elif [ $# = 0 ]; then
     /usr/bin/genkernel --help
 fi
 
+# Get kernel version from kernel image.
+kernversion () {
+    return $(file $_efiPath/$1 | grep -Po '(?<=version)\W*\K[^ ]*')
+}
+
 case $_action in
     all)
-        /usr/bin/genkernel $_args all && [[ -f $_imagePath/bzImage ]] && cp $_efiPath/bootx64{,.old}.efi && cp $_imagePath/bzImage $_efiPath/bootx64.efi
+        # Execute genkernel and if successful check if the kernel image exist.
+        /usr/bin/genkernel $_args all && [[ -f $_imagePath/bzImage ]]
 
+        builtkernver=$(kernversion $_imagePath/bzImage)
+        currentkernver=$(kernversion $_efiPath/bootx64.efi)
+
+        # Compare built image kernel version with existent in EFI.
+        if [ $builtkernver != currentkernver ]; then
+            cp $_efiPath/bootx64{,.old}.efi
+        fi
+        cp $_imagePath/bzImage $_efiPath/bootx64.efi
         ;;
     *)
         /usr/bin/genkernel $_args $_action
         ;;
 esac
-
