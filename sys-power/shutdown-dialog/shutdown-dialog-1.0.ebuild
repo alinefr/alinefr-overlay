@@ -16,7 +16,7 @@ S="${WORKDIR}"
 DEPEND="
 	gnome-extra/zenity
 	sys-apps/dbus
-	x11-misc/slock
+	x11-misc/i3lock
 	x11-libs/gksu
 "
 
