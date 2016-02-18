@@ -39,7 +39,7 @@ fi
 
 # Get kernel version from kernel image.
 kernversion () {
-    return $(file $_efiPath/$1 | grep -Po '(?<=version)\W*\K[^ ]*')
+    return $(file $1 | grep -Po '(?<=version)\W*\K[^ ]*')
 }
 
 case $_action in
