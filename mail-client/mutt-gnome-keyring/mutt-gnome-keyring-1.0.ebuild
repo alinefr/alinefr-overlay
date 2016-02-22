@@ -3,15 +3,15 @@
 # $Id$
 
 EAPI="5"
+inherit git-r3
 
 DESCRIPTION="Helper script to make the Mutt mail client lookup credentials in Gnome keyring."
-HOMEPAGE="https://github.com/wbolster/mutt-gnome-keyring"
-SRC_URI=""
+HOMEPAGE="https://github.com/alinefr/mutt-gnome-keyring"
+EGIT_REPO_URI="git://github.com/alinefr/${PN}.git"
 
 LICENSE="NONE"
 SLOT=0
 KEYWORDS="~amd64 ~x86"
-S="${WORKDIR}"
 
 DEPEND="
 	gnome-base/gnome-keyring
@@ -20,5 +20,5 @@ DEPEND="
 "
 
 src_install() {
-	dobin ${FILESDIR}/mutt-gnome-keyring-password.py
+	dobin mutt-gnome-keyring-password.py
 }
