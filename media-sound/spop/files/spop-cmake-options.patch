@@ -1,6 +1,6 @@
-reverted:
---- spop-9999.orig/CMakeLists.txt	2016-02-27 19:36:51.780479291 -0300
-+++ spop-9999/CMakeLists.txt	2016-02-27 19:40:17.000481718 -0300
+diff -Naur spop-9999.orig/CMakeLists.txt spop-9999/CMakeLists.txt
+--- spop-9999.orig/CMakeLists.txt	2016-02-27 20:28:30.840515939 -0300
++++ spop-9999/CMakeLists.txt	2016-02-27 20:34:47.280520391 -0300
 @@ -29,6 +29,22 @@
  find_package(PkgConfig)
  set(targets)
@@ -28,6 +28,18 @@ reverted:
  check_include_files("sys/soundcard.h" HAVE_SYS_SOUNDCARD_H)
  
  # Check for optional libraries
+-pkg_check_modules(AO ao)
+-string(REPLACE ";" " " AO_CFLAGS "${AO_CFLAGS}")
+-pkg_check_modules(DBUS dbus-glib-1)
+-string(REPLACE ";" " " DBUS_CFLAGS "${DBUS_CFLAGS}")
+-pkg_check_modules(GIO_UNIX gio-unix-2.0)
+-string(REPLACE ";" " " GIO_UNIX_CFLAGS "${GIO_UNIX_CFLAGS}")
+-pkg_check_modules(NOTIFY libnotify)
+-string(REPLACE ";" " " NOTIFY_CFLAGS "${NOTIFY_CFLAGS}")
+-pkg_check_modules(SOUP libsoup-2.4)
+-string(REPLACE ";" " " SOUP_CFLAGS "${SOUP_CFLAGS}")
+-pkg_check_modules(SOX sox)
+-string(REPLACE ";" " " SOX_CFLAGS "${SOX_CFLAGS}")
 +if(ENABLE_AO)
 +  pkg_check_modules(AO ao)
 +  string(REPLACE ";" " " AO_CFLAGS "${AO_CFLAGS}")
@@ -52,18 +64,6 @@ reverted:
 +  pkg_check_modules(SOX sox)
 +  string(REPLACE ";" " " SOX_CFLAGS "${SOX_CFLAGS}")
 +endif(ENABLE_SOX)
--pkg_check_modules(AO ao)
--string(REPLACE ";" " " AO_CFLAGS "${AO_CFLAGS}")
--pkg_check_modules(DBUS dbus-glib-1)
--string(REPLACE ";" " " DBUS_CFLAGS "${DBUS_CFLAGS}")
--pkg_check_modules(GIO_UNIX gio-unix-2.0)
--string(REPLACE ";" " " GIO_UNIX_CFLAGS "${GIO_UNIX_CFLAGS}")
--pkg_check_modules(NOTIFY libnotify)
--string(REPLACE ";" " " NOTIFY_CFLAGS "${NOTIFY_CFLAGS}")
--pkg_check_modules(SOUP libsoup-2.4)
--string(REPLACE ";" " " SOUP_CFLAGS "${SOUP_CFLAGS}")
--pkg_check_modules(SOX sox)
--string(REPLACE ";" " " SOX_CFLAGS "${SOX_CFLAGS}")
  
  # spop daemon
  set(SPOPD
@@ -71,6 +71,17 @@ reverted:
  endif(APPLE)
  
  # Audio plugin: OSS
+-if(HAVE_SYS_SOUNDCARD_H)
+-  set(AUDIO_OSS
+-    plugins/oss.c
+-  )
+-  add_library(spop_audio_oss MODULE ${AUDIO_OSS})
+-  set_target_properties(spop_audio_oss PROPERTIES
+-    COMPILE_FLAGS "${GLIB2_CFLAGS}"
+-  )
+-  target_link_libraries(spop_audio_oss ${GLIB2_LIBRARIES})
+-  set(targets ${targets} spop_audio_oss)
+-endif(HAVE_SYS_SOUNDCARD_H)
 +if(OSS_ENABLED)
 +  if(HAVE_SYS_SOUNDCARD_H)
 +    set(AUDIO_OSS
@@ -84,24 +95,46 @@ reverted:
 +    set(targets ${targets} spop_audio_oss)
 +  endif(HAVE_SYS_SOUNDCARD_H)
 +endif(OSS_ENABLED)
--if(HAVE_SYS_SOUNDCARD_H)
--  set(AUDIO_OSS
--    plugins/oss.c
--  )
--  add_library(spop_audio_oss MODULE ${AUDIO_OSS})
--  set_target_properties(spop_audio_oss PROPERTIES
--    COMPILE_FLAGS "${GLIB2_CFLAGS}"
--  )
--  target_link_libraries(spop_audio_oss ${GLIB2_LIBRARIES})
--  set(targets ${targets} spop_audio_oss)
--endif(HAVE_SYS_SOUNDCARD_H)
  
  # Audio plugin: libao
  if(AO_FOUND)
-@@ -201,17 +231,19 @@
- set(targets ${targets} spop_plugin_savestate)
+@@ -190,28 +220,32 @@
+ endif(NOTIFY_FOUND)
+ 
+ # Generic plugin: savestate
+-set(PLUGIN_SAVESTATE
+-  plugins/savestate.c
+-)
+-add_library(spop_plugin_savestate MODULE ${PLUGIN_SAVESTATE})
+-set_target_properties(spop_plugin_savestate PROPERTIES
+-  COMPILE_FLAGS "${GLIB2_CFLAGS} ${JSON_GLIB_CFLAGS}"
+-)
+-target_link_libraries(spop_plugin_savestate ${GLIB2_LIBRARIES} ${JSON_GLIB_LIBRARIES})
+-set(targets ${targets} spop_plugin_savestate)
++if(ENABLE_SAVESTATE)
++  set(PLUGIN_SAVESTATE
++    plugins/savestate.c
++  )
++  add_library(spop_plugin_savestate MODULE ${PLUGIN_SAVESTATE})
++  set_target_properties(spop_plugin_savestate PROPERTIES
++    COMPILE_FLAGS "${GLIB2_CFLAGS} ${JSON_GLIB_CFLAGS}"
++  )
++  target_link_libraries(spop_plugin_savestate ${GLIB2_LIBRARIES} ${JSON_GLIB_LIBRARIES})
++  set(targets ${targets} spop_plugin_savestate)
++endif(ENABLE_SAVESTATE)
  
  # Generic plugin: scrobble
+-if(SOUP_FOUND)
+-  set(PLUGIN_SCROBBLE
+-    plugins/scrobble.c
+-  )
+-  add_library(spop_plugin_scrobble MODULE ${PLUGIN_SCROBBLE})
+-  set_target_properties(spop_plugin_scrobble PROPERTIES
+-    COMPILE_FLAGS "${GLIB2_CFLAGS} ${SOUP_CFLAGS}"
+-  )
+-  target_link_libraries(spop_plugin_scrobble ${GLIB2_LIBRARIES} ${SOUP_LIBRARIES})
+-  set(targets ${targets} spop_plugin_scrobble)
+-endif(SOUP_FOUND)
 +if(SCROBBLE_ENABLED)
 +  if(SOUP_FOUND)
 +    set(PLUGIN_SCROBBLE
@@ -115,17 +148,6 @@ reverted:
 +    set(targets ${targets} spop_plugin_scrobble)
 +  endif(SOUP_FOUND)
 +endif(SCROBBLE_ENABLED)
--if(SOUP_FOUND)
--  set(PLUGIN_SCROBBLE
--    plugins/scrobble.c
--  )
--  add_library(spop_plugin_scrobble MODULE ${PLUGIN_SCROBBLE})
--  set_target_properties(spop_plugin_scrobble PROPERTIES
--    COMPILE_FLAGS "${GLIB2_CFLAGS} ${SOUP_CFLAGS}"
--  )
--  target_link_libraries(spop_plugin_scrobble ${GLIB2_LIBRARIES} ${SOUP_LIBRARIES})
--  set(targets ${targets} spop_plugin_scrobble)
--endif(SOUP_FOUND)
  
  # dspop client
  install(PROGRAMS dspop/dspop DESTINATION bin)
