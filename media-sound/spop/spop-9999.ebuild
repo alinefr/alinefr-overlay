@@ -15,13 +15,14 @@ EGIT_REPO_URI="git://github.com/Schnouki/${PN}.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+ao sox oss"
+IUSE="+ao sox oss awesome"
 
 RDEPEND="
 	dev-libs/libspotify
 	dev-libs/json-glib
 	ao? ( media-libs/libao )
 	sox? ( media-sound/sox )
+	awesome? ( dev-lua/luasocket )
 	"
 DEPEND="${RDEPEND}"
 
@@ -32,9 +33,10 @@ BUILD_DIR="${S}/build"
 src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX=/usr
-		$(cmake-utils_use ao AUDIO_AO)
-		$(cmake-utils_use sox AUDIO_SOX)
-		$(cmake-utils_use oss AUDIO_OSS)
+		$(cmake-utils_use_with ao AUDIO_AO)
+		$(cmake-utils_use_with sox AUDIO_SOX)
+		$(cmake-utils_use_with oss AUDIO_OSS)
+		$(cmake-utils_use_with awesome PLUGIN_AWESOME)
 	)
 
 	cmake-utils_src_configure
