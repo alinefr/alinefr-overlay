@@ -31,7 +31,7 @@ src_prepare() {
 	sed -i -e 's#PKG_PREFIX:$(prefix)#PKG_PREFIX:$(real_prefix)#'\
 		-e 's/ldconfig.*//'\
 		-e "s#prefix)/lib#prefix)/$(get_libdir)#g" Makefile || die
-	sed -i -e "s#{exec_prefix}/lib#{exec_prefix/$(get_libdir)#" lib/pkgconfig/${PN}.pc || die
+	sed -i -e "s#{exec_prefix}/lib#{exec_prefix}/$(get_libdir)#" lib/pkgconfig/${PN}.pc || die
 }
 
 src_compile() {
