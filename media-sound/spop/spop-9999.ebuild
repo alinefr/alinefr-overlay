@@ -41,6 +41,10 @@ src_compile() {
 
 src_install() {
 	cmake-utils_src_install
-	insinto /usr/share/spop
+	insinto ${EPREFIX}/share/spop
 	doins spopd.conf.sample
+}
+
+pkg_postinst() {
+	einfo "Copy ${EPREFIX}/share/spop/spopd.conf.sample to ~/.config/spop/spopd.conf."
 }
