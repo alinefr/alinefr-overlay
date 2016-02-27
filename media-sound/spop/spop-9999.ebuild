@@ -37,6 +37,12 @@ DOCS=( {README,CONTRIBUTORS}.md COPYING )
 
 BUILD_DIR="${S}/build"
 
+src_prepare() {
+	epatch "${FILESDIR}/${PN}-cmake-options.patch"
+
+	epatch_user
+}
+
 src_configure() {
 	local mycmakeargs=(
 		$(cmake-utils_use_enable ao AO)
