@@ -41,4 +41,6 @@ src_compile() {
 
 src_install() {
 	cmake-utils_src_install
+	insinto /usr/share/spop
+	doins spopd.conf.sample
 }
