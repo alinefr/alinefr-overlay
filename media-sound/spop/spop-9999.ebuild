@@ -15,7 +15,7 @@ EGIT_REPO_URI="git://github.com/Schnouki/${PN}.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+ao awesome dbus gio libnotify oss savestate soup sox"
+IUSE="+ao awesome dbus gio libnotify oss +savestate +scrobble +soup sox"
 
 REQUIRED_USE="awesome? ( dbus ) 
 			  savestate? ( soup )
@@ -52,6 +52,9 @@ src_configure() {
 		$(cmake-utils_use_enable awesome AWESOME)
 		$(cmake-utils_use_enable gio GIO)
 		$(cmake-utils_use_enable libnotify NOTIFY)
+		$(cmake-utils_use_enable soup SOUP)
+		$(cmake-utils_use_enable savestate SAVESTATE)
+		$(cmake-utils_use_enable scrobble SCROBBLE)
 	)
 
 	cmake-utils_src_configure
