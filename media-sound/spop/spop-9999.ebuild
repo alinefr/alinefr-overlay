@@ -33,10 +33,10 @@ BUILD_DIR="${S}/build"
 src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_PREFIX=/usr
-		$(cmake-utils_use_with ao AUDIO_AO)
-		$(cmake-utils_use_with sox AUDIO_SOX)
-		$(cmake-utils_use_with oss AUDIO_OSS)
-		$(cmake-utils_use_with awesome PLUGIN_AWESOME)
+		$(cmake-utils_use ao AO_FOUND)
+		$(cmake-utils_use sox SOX_FOUND)
+		$(cmake-utils_use oss OSS_FOUND)
+		$(cmake-utils_use_with awesome DBUS_FOUND)
 	)
 
 	cmake-utils_src_configure
