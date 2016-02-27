@@ -15,12 +15,14 @@ EGIT_REPO_URI="git://github.com/Schnouki/${PN}.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
+IUSE="ao"
 
-DEPEND=""
 RDEPEND="
 	dev-libs/libspotify
 	dev-libs/json-glib
+	ao? ( media-libs/libao )
 	"
+DEPEND="${RDEPEND}"
 
 DOCS=( {README,CONTRIBUTORS}.md COPYING )
 
