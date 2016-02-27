@@ -1,0 +1,131 @@
+diff -Naur spop-9999.orig/CMakeLists.txt spop-9999/CMakeLists.txt
+--- spop-9999.orig/CMakeLists.txt	2016-02-27 16:51:05.470361673 -0300
++++ spop-9999/CMakeLists.txt	2016-02-27 17:09:19.130374606 -0300
+@@ -29,6 +29,22 @@
+ find_package(PkgConfig)
+ set(targets)
+ 
++# Optional switches
++option(ENABLE_AO "Enable libao" ON)
++option(ENABLE_DBUS "Enable dbus" ON)
++option(ENABLE_GIO "Enable GIO" ON)
++option(ENABLE_NOTIFY "Enable linotofy" ON)
++option(ENABLE_SOUP "Enable soup" ON)
++option(ENABLE_SOX "Enable sox" ON)
++option(ENABLE_AWESOME "Enable plugin for Awesome WM" ON)
++option(ENABLE_OSS "Enable OSS" ON)
++option(ENABLE_SCROBBLE "Enable scrobble" ON)
++option(ENABLE_SAVESTATE "Enable savestate" ON)
++
++if(ENABLE_AWESOME)
++  set(ENABLE_DBUS ON)
++endif
++
+ # Check for libspotify
+ pkg_check_modules(SPOTIFY REQUIRED libspotify>=12.1.45)
+ string(REPLACE ";" " " SPOTIFY_CFLAGS "${SPOTIFY_CFLAGS}")
+@@ -47,18 +63,30 @@
+ check_include_files("sys/soundcard.h" HAVE_SYS_SOUNDCARD_H)
+ 
+ # Check for optional libraries
+-pkg_check_modules(AO ao)
+-string(REPLACE ";" " " AO_CFLAGS "${AO_CFLAGS}")
+-pkg_check_modules(DBUS dbus-glib-1)
+-string(REPLACE ";" " " DBUS_CFLAGS "${DBUS_CFLAGS}")
+-pkg_check_modules(GIO_UNIX gio-unix-2.0)
+-string(REPLACE ";" " " GIO_UNIX_CFLAGS "${GIO_UNIX_CFLAGS}")
+-pkg_check_modules(NOTIFY libnotify)
+-string(REPLACE ";" " " NOTIFY_CFLAGS "${NOTIFY_CFLAGS}")
+-pkg_check_modules(SOUP libsoup-2.4)
+-string(REPLACE ";" " " SOUP_CFLAGS "${SOUP_CFLAGS}")
+-pkg_check_modules(SOX sox)
+-string(REPLACE ";" " " SOX_CFLAGS "${SOX_CFLAGS}")
++if(ENABLE_AO)
++  pkg_check_modules(AO ao)
++  string(REPLACE ";" " " AO_CFLAGS "${AO_CFLAGS}")
++endif
++if(ENABLE_DBUS)
++  pkg_check_modules(DBUS dbus-glib-1)
++  string(REPLACE ";" " " DBUS_CFLAGS "${DBUS_CFLAGS}")
++endif
++if(ENABLE_GIO)
++  pkg_check_modules(GIO_UNIX gio-unix-2.0)
++  string(REPLACE ";" " " GIO_UNIX_CFLAGS "${GIO_UNIX_CFLAGS}")
++endif
++if(ENABLE_NOTIFY)
++  pkg_check_modules(NOTIFY libnotify)
++  string(REPLACE ";" " " NOTIFY_CFLAGS "${NOTIFY_CFLAGS}")
++endif
++if(ENABLE_SOUP)
++  pkg_check_modules(SOUP libsoup-2.4)
++  string(REPLACE ";" " " SOUP_CFLAGS "${SOUP_CFLAGS}")
++endif
++if(ENABLE_SOX)
++  pkg_check_modules(SOX sox)
++  string(REPLACE ";" " " SOX_CFLAGS "${SOX_CFLAGS}")
++endif
+ 
+ # spop daemon
+ set(SPOPD
+@@ -91,17 +119,19 @@
+ endif(APPLE)
+ 
+ # Audio plugin: OSS
+-if(HAVE_SYS_SOUNDCARD_H)
+-  set(AUDIO_OSS
+-    plugins/oss.c
+-  )
+-  add_library(spop_audio_oss MODULE ${AUDIO_OSS})
+-  set_target_properties(spop_audio_oss PROPERTIES
+-    COMPILE_FLAGS "${GLIB2_CFLAGS}"
+-  )
+-  target_link_libraries(spop_audio_oss ${GLIB2_LIBRARIES})
+-  set(targets ${targets} spop_audio_oss)
+-endif(HAVE_SYS_SOUNDCARD_H)
++if(OSS_ENABLED)
++  if(HAVE_SYS_SOUNDCARD_H)
++    set(AUDIO_OSS
++      plugins/oss.c
++    )
++    add_library(spop_audio_oss MODULE ${AUDIO_OSS})
++    set_target_properties(spop_audio_oss PROPERTIES
++      COMPILE_FLAGS "${GLIB2_CFLAGS}"
++    )
++    target_link_libraries(spop_audio_oss ${GLIB2_LIBRARIES})
++    set(targets ${targets} spop_audio_oss)
++  endif(HAVE_SYS_SOUNDCARD_H)
++endif
+ 
+ # Audio plugin: libao
+ if(AO_FOUND)
+@@ -201,17 +231,19 @@
+ set(targets ${targets} spop_plugin_savestate)
+ 
+ # Generic plugin: scrobble
+-if(SOUP_FOUND)
+-  set(PLUGIN_SCROBBLE
+-    plugins/scrobble.c
+-  )
+-  add_library(spop_plugin_scrobble MODULE ${PLUGIN_SCROBBLE})
+-  set_target_properties(spop_plugin_scrobble PROPERTIES
+-    COMPILE_FLAGS "${GLIB2_CFLAGS} ${SOUP_CFLAGS}"
+-  )
+-  target_link_libraries(spop_plugin_scrobble ${GLIB2_LIBRARIES} ${SOUP_LIBRARIES})
+-  set(targets ${targets} spop_plugin_scrobble)
+-endif(SOUP_FOUND)
++if(SCROBBLE_ENABLED)
++  if(SOUP_FOUND)
++    set(PLUGIN_SCROBBLE
++      plugins/scrobble.c
++    )
++    add_library(spop_plugin_scrobble MODULE ${PLUGIN_SCROBBLE})
++    set_target_properties(spop_plugin_scrobble PROPERTIES
++      COMPILE_FLAGS "${GLIB2_CFLAGS} ${SOUP_CFLAGS}"
++    )
++    target_link_libraries(spop_plugin_scrobble ${GLIB2_LIBRARIES} ${SOUP_LIBRARIES})
++    set(targets ${targets} spop_plugin_scrobble)
++  endif(SOUP_FOUND)
++endif
+ 
+ # dspop client
+ install(PROGRAMS dspop/dspop DESTINATION bin)

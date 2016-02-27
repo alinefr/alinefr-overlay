@@ -15,14 +15,21 @@ EGIT_REPO_URI="git://github.com/Schnouki/${PN}.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+ao sox oss awesome"
+IUSE="+ao awesome dbus gio libnotify oss savestate soup sox"
+
+REQUIRED_USE="awesome? ( dbus ) 
+			  savestate? ( soup )
+			  "
 
 RDEPEND="
 	dev-libs/libspotify
 	dev-libs/json-glib
+	dev-lua/luasocket 
 	ao? ( media-libs/libao )
 	sox? ( media-sound/sox )
-	awesome? ( dev-lua/luasocket )
+	gio? ( dev-libs/glib )	
+	libnotify? ( x11-libs/libnotify )
+	soup? ( net-libs/libsoup )
 	"
 DEPEND="${RDEPEND}"
 
@@ -32,11 +39,13 @@ BUILD_DIR="${S}/build"
 
 src_configure() {
 	local mycmakeargs=(
-		-DCMAKE_INSTALL_PREFIX=/usr
-		$(cmake-utils_use ao AO_FOUND)
-		$(cmake-utils_use sox SOX_FOUND)
-		$(cmake-utils_use oss OSS_FOUND)
-		$(cmake-utils_use_with awesome DBUS_FOUND)
+		$(cmake-utils_use_enable ao AO)
+		$(cmake-utils_use_enable sox SOX)
+		$(cmake-utils_use_enable oss OSS)
+		$(cmake-utils_use_enable dbus DBUS)
+		$(cmake-utils_use_enable awesome AWESOME)
+		$(cmake-utils_use_enable gio GIO)
+		$(cmake-utils_use_enable libnotify NOTIFY)
 	)
 
 	cmake-utils_src_configure
