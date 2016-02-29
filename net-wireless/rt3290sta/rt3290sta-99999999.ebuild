@@ -34,9 +34,12 @@ pkg_setup() {
 	linux-mod_pkg_setup
 }
 
+=/usr/src/linux
+
 src_compile() {
 	# ARCH ebuild variable conflicts with ARCH from kernel Makefile.  
 	eval unset ARCH
+	export KERN_VER=$KV_FULL	
 	default
 }
 
