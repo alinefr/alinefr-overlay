@@ -39,7 +39,7 @@ fi
 
 # Get kernel version from kernel image.
 kernversion () {
-    return $(file $1 | grep -Po '(?<=version)\W*\K[^ ]*')
+    echo $(file $1 | grep -Po '(?<=version)\W*\K[^ ]*')
 }
 
 case $_action in
@@ -51,7 +51,7 @@ case $_action in
         currentkernver=$(kernversion $_efiPath/bootx64.efi)
 
         # Compare built image kernel version with existent in EFI.
-        if [[ $builtkernver != currentkernver ]]; then
+        if [[ $builtkernver != $currentkernver ]]; then
             cp $_efiPath/bootx64{,.old}.efi
         fi
         cp $_imagePath/bzImage $_efiPath/bootx64.efi
