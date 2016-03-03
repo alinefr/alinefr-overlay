@@ -39,6 +39,7 @@ kernversion () {
 case $_action in
     all)
         # Execute genkernel and if successful check if the kernel image exist.
+        echo "Executing genkernel $_args all..."
         /usr/bin/genkernel $_args all && [[ -f $_imagePath/bzImage ]]
         
         # Check if our directories exist.
@@ -52,8 +53,10 @@ case $_action in
 
         # Compare built image kernel version with existent in EFI.
         if [[ $builtkernver != $currentkernver ]]; then
+            echo "Moving current kernel to bootx64.old.efi..."
             cp $_efiPath/bootx64{,.old}.efi
         fi
+        echo "Installing bzImage to bootx64.efi..."
         cp $_imagePath/bzImage $_efiPath/bootx64.efi
         ;;
     *)
