@@ -22,4 +22,5 @@ DEPEND="
 
 src_install() {
 	dobin ${FILESDIR}/lightsOn.sh
+	dobin ${FILESDIR}/locker.sh
 }
