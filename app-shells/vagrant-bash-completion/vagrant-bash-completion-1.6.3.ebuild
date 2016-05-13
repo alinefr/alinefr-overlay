@@ -22,7 +22,8 @@ KEYWORDS="~amd64"
 IUSE=""
 
 DEPEND="
-	app-emulation/vagrant[-bin]
+	( || ( app-emulation/vagrant 
+	app-emulation/vagrant-bin ) )
 	!<app-shells/bash-4
 "
 RDEPEND="${DEPEND}
