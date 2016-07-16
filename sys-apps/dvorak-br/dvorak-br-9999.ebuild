@@ -31,7 +31,7 @@ src_install() {
 		mv unix/brdk/brdk.kmap dvorak-br.map
 		gzip dvorak-br.map
 		insinto /usr/share/keymaps/i386/dvorak
-		doins dvorak.map.gz
+		doins dvorak-br.map.gz
 	fi
 
 	if use X; then
