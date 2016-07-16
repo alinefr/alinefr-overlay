@@ -1,0 +1,12 @@
+diff -Naur dvorakng.orig/Makefile dvorakng/Makefile
+--- dvorakng.orig/Makefile	2016-07-16 00:55:59.036667069 -0300
++++ dvorakng/Makefile	2016-07-16 00:57:08.872842283 -0300
+@@ -15,7 +15,7 @@
+ CFLAGS   = $(PROF) -fmessage-length=0 -Wall $(LIMIT_LENGTH)
+ CXXFLAGS = $(CFLAGS)
+ LDFLAGS  = $(PROF)
+-LIBS     = -lncurses
++LIBS     = -lncurses -ltinfo
+ 
+ OBJECTS  = dvorakng.o lessons.o
+ HEADERS  = lessons.h
