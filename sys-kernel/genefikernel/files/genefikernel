@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------------------
 
 # EFI boot dir.
-_efiPath=/boot/EFI/Gentoo
+_efiPath=/boot/EFI/Boot
 _imagePath=/usr/src/linux/arch/x86_64/boot
 
 # In _args we get any arguments except the last (_action).
@@ -43,6 +43,10 @@ case $_action in
         /usr/bin/genkernel $_args all && [[ -f $_imagePath/bzImage ]]
         
         # Check if our directories exist.
+        if [[ ! -d $_efiPath ]]; then
+            mount /boot
+        fi
+
         if [[ ! -d $_imagePath ]] || [[ ! -d $_efiPath ]]; then
             echo "$_imagePath or $_efiPath does not exist"
             exit 1
