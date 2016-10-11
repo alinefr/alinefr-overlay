@@ -18,5 +18,6 @@ DEPEND=">=net-libs/nodejs-${NODEJS_MIN_VERSION}"
 DOCS=( README.md )
 
 src_install() {
-	dobin bin/{apply,build,jshint,land} || die "dobin failed"
+	node-module_src_install
+	install_node_module_binary "bin/jshint" "/usr/bin/jshint" 
 }
