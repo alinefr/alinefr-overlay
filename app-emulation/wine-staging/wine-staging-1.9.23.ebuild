@@ -365,10 +365,9 @@ src_prepare() {
 	local md5="$(md5sum server/protocol.def)"
 	local PATCHES=(
 		"${FILESDIR}"/${MY_PN}-1.5.26-winegcc.patch #260726
-		"${FILESDIR}"/${MY_PN}-1.4_rc2-multilib-portage.patch #395615
+		"${FILESDIR}"/${MY_PN}-1.9.5-multilib-portage.patch #395615
 		"${FILESDIR}"/${MY_PN}-1.7.12-osmesa-check.patch #429386
 		"${FILESDIR}"/${MY_PN}-1.6-memset-O3.patch #480508
-		"${FILESDIR}"/${MY_PN}-1.7.45-libunwind-osx-only.patch # only applies to this version
 	)
 
 	if use gstreamer; then
