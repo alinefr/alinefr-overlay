@@ -1,0 +1,40 @@
+>From 7362cabccdc7f6b3aa745fcd0ec6f2701f2eb4b2 Mon Sep 17 00:00:00 2001
+From: FeepingCreature <default_357-line@yahoo.de>
+Date: Fri, 8 Mar 2013 16:52:39 +0100
+Subject: ntdll: Make NtFlushVirtualMemory's msync() call asynchronous, since
+ FlushViewOfFile, which calls it, is specified to be asynchronous in
+ the MSDN
+ (http://msdn.microsoft.com/en-us/library/windows/desktop/aa366563%28v=vs.85%29.aspx
+ ).
+
+---
+ dlls/ntdll/virtual.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/virtual.c b/dlls/ntdll/virtual.c
+index a99bca4..e4f2bb6 100644
+--- a/dlls/ntdll/virtual.c
++++ b/dlls/ntdll/virtual.c
+@@ -62,6 +62,10 @@ WINE_DECLARE_DEBUG_CHANNEL(module);
+ #define MS_SYNC 0
+ #endif
+ 
++#ifndef MS_ASYNC
++#define MS_ASYNC 1
++#endif
++
+ #ifndef MAP_NORESERVE
+ #define MAP_NORESERVE 0
+ #endif
+@@ -2780,7 +2784,7 @@ NTSTATUS WINAPI NtFlushVirtualMemory( HANDLE process, LPCVOID *addr_ptr,
+     {
+         if (!*size_ptr) *size_ptr = view->size;
+         *addr_ptr = addr;
+-        if (msync( addr, *size_ptr, MS_SYNC )) status = STATUS_NOT_MAPPED_DATA;
++        if (msync( addr, *size_ptr, MS_ASYNC )) status = STATUS_NOT_MAPPED_DATA;
+     }
+     server_leave_uninterrupted_section( &csVirtual, &sigset );
+     return status;
+-- 
+1.7.12
+
