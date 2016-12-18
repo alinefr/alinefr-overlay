@@ -5,7 +5,7 @@
 # To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/ 
 # or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
-ACTION=`zenity --width=90 --height=200 --list --radiolist --text="Select logout action" --title="Logout" --column "Choice" --column "Action" TRUE Shutdown FALSE Reboot FALSE LockScreen FALSE Suspend`
+ACTION=`zenity --width=90 --height=200 --list --text="Select logout action" --title="Logout" --column "Action" Shutdown Reboot LockScreen Suspend`
 
 if [ -n "${ACTION}" ];then
   case $ACTION in
@@ -26,7 +26,7 @@ if [ -n "${ACTION}" ];then
     dbus-send --system --print-reply --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend
     ;;
   LockScreen)
-    i3lock
+    xautolock -locknow || i3lock
     ;;
   esac
 fi

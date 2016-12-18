@@ -17,9 +17,11 @@ DEPEND="
 	gnome-extra/zenity
 	sys-apps/dbus
 	x11-misc/i3lock
-	x11-libs/gksu
+	x11-misc/xautolock
 "
 
 src_install() {
-	dobin ${FILESDIR}/shutdown_dialog.sh
+	dobin ${FILESDIR}/shutdown_dialog
+	insinto /usr/share/applications
+	doins ${FILESDIR}/shutdown_dialog.desktop
 }

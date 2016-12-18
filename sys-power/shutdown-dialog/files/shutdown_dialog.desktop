@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+GenericName=Shutdown Dialog
+Name=Shutdown Dialog
+Comment=Menu for logging out, locking screen, shutting down or rebooting.
+TryExec=shutdown_dialog
+Exec=shutdown_dialog
+Terminal=false
+Categories=System;
+StartupNotify=false
+X-GNOME-Autostart-Delay=60
+
