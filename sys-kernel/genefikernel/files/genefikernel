@@ -9,7 +9,7 @@
 
 # EFI boot dir.
 _efiPath=/boot/EFI/Boot
-_imagePath=/usr/src/linux/arch/x86_64/boot
+_imagePath=/usr/src/linux/arch/x86/boot
 
 # In _args we get any arguments except the last (_action).
 array=($@)
