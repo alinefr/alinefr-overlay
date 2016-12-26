@@ -33,8 +33,8 @@
 # xscreensaver/kscreensaver and PowerManagement.
 mplayer_detection=1
 vlc_detection=1
-firefox_flash_detection=1
-chromium_flash_detection=1
+firefox_fs_detection=1
+chromium_fs_detection=1
 minitube_detection=1
 
 # Names of programs which, when running, you wish to delay the screensaver.
@@ -124,30 +124,19 @@ isAppRunning()
     #Get title of active window
     activ_win_title=`xprop -id $activ_win_id | grep "WM_CLASS(STRING)"`   # I used WM_NAME(STRING) before, WM_CLASS more accurate.
 
-
-
     # Check if user want to detect Video fullscreen on Firefox, modify variable firefox_flash_detection if you dont want Firefox detection
-    if [ $firefox_flash_detection == 1 ];then
-        if [[ "$activ_win_title" = *unknown* || "$activ_win_title" = *plugin-container* ]];then
-        # Check if plugin-container process is running
-            flash_process=`pgrep -l plugin-containe | grep -wc plugin-containe`
-            #(why was I using this line avobe? delete if pgrep -lc works ok)
-            #flash_process=`pgrep -lc plugin-containe`
-            if [[ $flash_process -ge 1 ]];then
-                return 1
-            fi
+    if [ $firefox_fs_detection == 1 ];then
+        if [[ "$activ_win_title" = *Firefox* || "$activ_win_title" = *plugin-container* ]]; then
+            return 1
         fi
     fi
 
 
     # Check if user want to detect Video fullscreen on Chromium, modify variable chromium_flash_detection if you dont want Chromium detection
-    if [ $chromium_flash_detection == 1 ];then
-        if [[ "$activ_win_title" = *exe* ]];then
-        # Check if Chromium/Chrome Flash process is running
-            flash_process=`pgrep -lfc ".*((c|C)hrome|chromium).*flashp.*"`
-            if [[ $flash_process -ge 1 ]];then
-                return 1
-            fi
+    if [ $chromium_fs_detection == 1 ];then
+        echo $activ_win_title 
+        if [[ "$activ_win_title" = *((C|c)hrome|(C|c)hromium)* ]]; then
+            return 1
         fi
     fi
 
