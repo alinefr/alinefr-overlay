@@ -26,8 +26,9 @@ RDEPEND="
 	media-libs/libpng:1.2
 	media-libs/libv4l
 	media-sound/pulseaudio[alsa,X]
-	media-video/ffmpeg[X]
+	media-video/ffmpeg:0/55.57.57[X]
 	net-misc/curl
+	>=sys-devel/gcc-5.3.0
 	x11-base/xorg-server
 	x11-libs/gtk+:2[-aqua]
 	x11-libs/libXinerama
