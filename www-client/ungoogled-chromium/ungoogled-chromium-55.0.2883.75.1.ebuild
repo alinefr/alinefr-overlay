@@ -25,4 +25,5 @@ src_install() {
 	doins -r ${S}/*
 	fperms +x /opt/${PN}/chrome
 	dosym /opt/${PN}/chrome /opt/bin/chrome
+	doman ${S}/chrome.1
 }
