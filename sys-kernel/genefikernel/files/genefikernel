@@ -23,6 +23,16 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
+# Check if our directories exist.
+if [[ ! -d $_efiPath ]]; then
+    mount /boot
+fi
+
+if [[ ! -d $_imagepath ]] || [[ ! -d $_efipath ]]; then
+    echo "$_imagepath or $_efipath does not exist"
+    exit 1
+fi
+
 # If the user gives only one argument, this one should be _action.
 if [ $# = 1 ]; then
     _action=$1
@@ -42,16 +52,6 @@ case $_action in
         echo "Executing genkernel $_args all..."
         /usr/bin/genkernel $_args all && [[ -f $_imagePath/bzImage ]]
         
-        # Check if our directories exist.
-        if [[ ! -d $_efiPath ]]; then
-            mount /boot
-        fi
-
-        if [[ ! -d $_imagePath ]] || [[ ! -d $_efiPath ]]; then
-            echo "$_imagePath or $_efiPath does not exist"
-            exit 1
-        fi
-
         builtkernver=$(kernversion $_imagePath/bzImage)
         currentkernver=$(kernversion $_efiPath/bootx64.efi)
 
