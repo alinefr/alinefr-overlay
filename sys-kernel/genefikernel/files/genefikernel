@@ -28,8 +28,8 @@ if [[ ! -d $_efiPath ]]; then
     mount /boot
 fi
 
-if [[ ! -d $_imagepath ]] || [[ ! -d $_efipath ]]; then
-    echo "$_imagepath or $_efipath does not exist"
+if [[ ! -d $_imagePath ]] || [[ ! -d $_efiPath ]]; then
+    echo "$_imagePath or $_efiPath does not exist"
     exit 1
 fi
 
