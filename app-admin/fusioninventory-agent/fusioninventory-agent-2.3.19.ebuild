@@ -20,6 +20,7 @@ DEPEND="
         dev-perl/IO-Socket-SSL
         dev-perl/UNIVERSAL-require
         dev-perl/XML-TreePP
+		dev-perl/libwww-perl
 "
 RDEPEND="${DEPEND}"
 
