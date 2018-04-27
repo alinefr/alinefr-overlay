@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI="5"
-
+inherit eutils
 
 EGIT_REPO_URI="git://gist.github.com/fa6258f3ff7b17747ee3.git"
 inherit git-r3
@@ -17,6 +17,10 @@ KEYWORDS="~amd64"
 
 RDEPEND="media-sound/spotify"
 DEPEND="${RDEPEND}"
+
+src_prepare() {
+	epatch "${FILESDIR}/spkey.patch"
+}
 
 src_install() {
 	dobin sp

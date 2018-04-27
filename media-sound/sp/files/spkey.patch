@@ -1,0 +1,16 @@
+--- sp-9999.orig/sp	2018-04-27 11:03:54.985258524 -0300
++++ sp-9999/sp	2018-04-27 11:08:14.163283488 -0300
+@@ -55,8 +55,11 @@
+ 
+ # To get SP_ID and SP_SECRET register at
+ # https://beta.developer.spotify.com/documentation/general/guides/app-settings/
+-SP_ID="<yout id>"
+-SP_SECRET="<your secret>"
++if [ -z ${SP_ID} ] || [ -z ${SP_SECRET} ]; then
++    echo 'ERROR: missing SP_ID and SP_SECRET.'
++    echo 'Get it from https://beta.developer.spotify.com/documentation/general/guides/app-settings/'
++    exit 1
++fi
+ 
+ # SHELL OPTIONS
+ 
