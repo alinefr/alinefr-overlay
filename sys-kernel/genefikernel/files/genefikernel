@@ -10,6 +10,7 @@
 # EFI boot dir.
 _efiPath=/boot/EFI/Boot
 _imagePath=/usr/src/linux/arch/x86/boot
+_rootDevice=/dev/sda
 
 # In _args we get any arguments except the last (_action).
 array=($@)
@@ -51,7 +52,7 @@ case $_action in
         # Execute genkernel and if successful check if the kernel image exist.
         echo "Executing genkernel $_args all..."
         /usr/bin/genkernel $_args all && [[ -f $_imagePath/bzImage ]]
-        
+
         builtkernver=$(kernversion $_imagePath/bzImage)
         currentkernver=$(kernversion $_efiPath/bootx64.efi)
 
@@ -62,6 +63,14 @@ case $_action in
         fi
         echo "Installing bzImage to bootx64.efi..."
         cp $_imagePath/bzImage $_efiPath/bootx64.efi
+        if ! efibootmgr -v grep -qi 'efi\\boot\\bootx64.efi'; then
+          find /boot -iwholename /boot/efi/boot/bootx64.efi && \
+            efibootmgr -c -d ${_rootDevice} -p 1 -L "Gentoo" -l "\EFI\Boot\Bootx64.efi"
+        fi
+        if ! efibootmgr -v grep -qi 'efi\\boot\\bootx64.old.efi'; then
+          find /boot -iwholename /boot/efi/boot/bootx64.efi && \
+            efibootmgr -c -d ${_rootDevice} -p 1 -L "Gentoo OLD" -l "\EFI\Boot\Bootx64.old.efi"
+        fi
         ;;
     *)
         /usr/bin/genkernel $_args $_action
