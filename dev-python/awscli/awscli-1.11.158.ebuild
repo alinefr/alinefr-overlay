@@ -17,11 +17,11 @@ KEYWORDS="~amd64"
 IUSE=""
 
 RDEPEND="
-	>=dev-python/botocore-1.8.20[${PYTHON_USEDEP}]
+	dev-python/botocore[${PYTHON_USEDEP}]
 	<=dev-python/colorama-0.3.3[${PYTHON_USEDEP}]
 	dev-python/docutils[${PYTHON_USEDEP}]
 	<=dev-python/rsa-3.5.0[${PYTHON_USEDEP}]
-	>=dev-python/s3transfer-0.1.12[${PYTHON_USEDEP}]
+	>=dev-python/s3transfer-0.1.5[${PYTHON_USEDEP}]
 	<=dev-python/pyyaml-3.12[${PYTHON_USEDEP}]
 
 "
